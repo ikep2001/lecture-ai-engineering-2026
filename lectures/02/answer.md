@@ -35,3 +35,20 @@
 ### 今後の追加実験
 
 Epoch（5/10/20）×LoRA rank（8/16/32）×seed（42/123/2026）の27条件を別実験として進めている。今回の提出結果には含めない。
+
+## 実験Notebook・評価結果
+
+今回の実験はローカルJupyterHubで実行した。
+実行済みNotebookと評価結果を以下に公開する。
+
+### 実行済みNotebook
+- [P0 Notebook](experiments/lora_format_tuning_P0.ipynb)
+- [P1 Notebook](experiments/lora_format_tuning_P1.ipynb)
+- [P2 Notebook](experiments/lora_format_tuning_P2.ipynb)
+
+### 評価結果
+- [5 Epoch result.json](experiments/results/epochs5/result.json)
+- [10 Epoch result.json](experiments/results/epochs10/result.json)
+- [20 Epoch result.json](experiments/results/epochs20/result.json)
+
+※ Epoch × rank × seed の27条件スイープ（P3）は今回の提出対象外。
