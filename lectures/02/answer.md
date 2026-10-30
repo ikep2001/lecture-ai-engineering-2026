@@ -52,3 +52,16 @@ Epoch（5/10/20）×LoRA rank（8/16/32）×seed（42/123/2026）の27条件を�
 - [20 Epoch result.json](experiments/results/epochs20/result.json)
 
 ※ Epoch × rank × seed の27条件スイープ（P3）は今回の提出対象外。
+
+## 追加実験：P3
+
+基礎課題の提出後、Epoch（5/10/20）×LoRA rank（8/16/32）×
+Seed（42/123/2026）の全27条件を独立に実行した。
+
+- [P3実験レポート](experiments/P3/P3_report.md)
+- [P3分析Notebook](experiments/P3/P3_analysis.ipynb)
+- [27条件の集計結果](experiments/P3/summary.csv)
+- [質問別の誤答分析](experiments/P3/question_errors.csv)
+
+P3はLoRA alphaとウォームアップ設定を変更した別プロトコルであり、
+P0〜P2と直接プールせずに分析した。
