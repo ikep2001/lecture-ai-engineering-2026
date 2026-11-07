@@ -5,6 +5,9 @@
 """
 
 import json
+from datetime import datetime, timezone
+from uuid import uuid4
+import random
 from functools import cache
 from pathlib import Path
 
@@ -77,3 +80,58 @@ def get_lecture_summary(lecture: int) -> str:
         available = sorted(p.stem for p in (DATA_DIR / "lectures").glob("*.md"))
         return f"第{lecture}回の要点はまだありません。用意されている回: {', '.join(available)}"
     return path.read_text(encoding="utf-8")
+
+def make_quiz(lecture: int) -> str:
+    """指定した回の用語から確認問題と解答を1問返す。
+
+    「第2回の確認問題を出して」のように、
+    講義内容の復習問題を求められたときに使う。
+    lecture には講義の回番号を指定する。
+    """
+    entries = [
+        e for e in load_glossary()
+        if e["lecture"] == lecture
+    ]
+    if not entries:
+        return json.dumps(
+            {"error": f"第{lecture}回の用語がありません。"},
+            ensure_ascii=False,
+        )
+
+    entry = random.choice(entries)
+    return json.dumps(
+        {
+            "question": f"「{entry['term']}」の意味は？",
+            "answer": entry["definition"],
+        },
+        ensure_ascii=False,
+    )
+
+
+# 個人の学習ログ。リポジトリの .gitignore で共有対象から除外。
+LEARNING_LOG_DIR = Path(__file__).resolve().parent.parent / "learning_log"
+
+
+def save_learning_log(topic: str, notes: str) -> str:
+    """学習した内容をローカルの learning_log/ に保存する。
+
+    学習内容の記録・保存を利用者が求めたときに使う。
+    ファイルの書き込みを伴うため、実行前に承認が必要。
+    topic は学習テーマ、notes は学習内容。
+    """
+    now = datetime.now(timezone.utc)
+    record = {
+        "topic": topic,
+        "notes": notes,
+        "created_at": now.isoformat(),
+    }
+
+    LEARNING_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    name = f"{now:%Y%m%dT%H%M%S}_{uuid4().hex[:12]}.json"
+    path = LEARNING_LOG_DIR / name
+
+    # 同名ファイルを上書きしない
+    with path.open("x", encoding="utf-8") as f:
+        json.dump(record, f, ensure_ascii=False, indent=2)
+
+    return f"学習ログを保存しました: {name}"
