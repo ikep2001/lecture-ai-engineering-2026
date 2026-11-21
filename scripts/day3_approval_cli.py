@@ -11,7 +11,7 @@ import json
 from pydantic_ai import DeferredToolRequests, DeferredToolResults
 from pydantic_ai.models.test import TestModel
 
-from app.agent import agent, build_model
+from app.legacy_agent import agent, build_model
 
 
 def main():
