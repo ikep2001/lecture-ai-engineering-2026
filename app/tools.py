@@ -184,3 +184,21 @@ def save_learning_log(topic: str, notes: str) -> str:
         json.dump(record, f, ensure_ascii=False, indent=2)
 
     return f"学習ログを保存しました: {name}"
+
+
+def search_graph_fused(query: str) -> str:
+    """第1〜3回の資料をベクトル検索し、根拠を保ったままGraphの候補を補完する。
+
+    通常のベクトル検索上位5ページを保持し、Graphの関連ページのうち、
+    質問に含まれる未カバーのキーワードを補うものだけ追加する。
+    """
+    import sqlite3
+    from google.genai.errors import APIError
+    from app.graph_fusion import search_fused
+
+    try:
+        return json.dumps(search_fused(query), ensure_ascii=False)
+    except (ValueError, OSError, sqlite3.Error) as e:
+        return json.dumps({"error": str(e), "results": []}, ensure_ascii=False)
+    except APIError as e:
+        return json.dumps({"error": api_error_message(e.code), "results": []}, ensure_ascii=False)
