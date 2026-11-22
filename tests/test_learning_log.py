@@ -7,7 +7,7 @@ from pydantic_ai import DeferredToolRequests, DeferredToolResults
 from pydantic_ai.models.test import TestModel
 
 from app import tools
-from app.agent import agent
+from app.legacy_agent import agent
 
 
 @pytest.fixture
