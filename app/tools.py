@@ -142,8 +142,15 @@ def make_quiz(lecture: int) -> str:
         if e["lecture"] == lecture
     ]
     if not entries:
+        available = sorted({
+            e["lecture"] for e in load_glossary()
+        })
         return json.dumps(
-            {"error": f"第{lecture}回の用語がありません。"},
+            {
+                "error": f"第{lecture}回の用語がありません。",
+                "available_lectures": available,
+                "hint": "利用可能な講義回を指定してください。",
+            },
             ensure_ascii=False,
         )
 
